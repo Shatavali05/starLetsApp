@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="styles1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome for icons -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #F1D3CE, #BF2EF0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            text-align: center;
+            position: relative;
+        }
+        .header {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .settings-icon {
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            background-color: #BF2EF0;
+            padding: 10px;
+            border-radius: 50%;
+        }
+        .settings-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            text-align: left;
+            width: 150px;
+        }
+        .settings-menu a {
+            display: block;
+            padding: 8px;
+            text-decoration: none;
+            color: black;
+            font-size: 1rem;
+        }
+        .settings-menu a:hover {
+            background: #F1D3CE;
+            border-radius: 5px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: white;
+            background-color: #BF2EF0;
+            padding: 15px;
+            border-radius: 10px;
+            width: 80%;
+        }
+        p {
+            font-size: 1.2rem;
+            color: black;
+        }
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            gap: 20px;
+            background: linear-gradient(to right,  #F1D3CE, #BF2EF0);
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+        }
+        .feature-item {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            width: 150px;
+            transition: transform 0.2s;
+        }
+        .feature-item:hover {
+            transform: scale(1.05);
+        }
+        .feature-item a {
+            text-decoration: none;
+            color: #00796b;
+            font-size: 1.5rem;
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: #BF2EF0;
+        }
+        /* Footer styles */
+        footer {
+            margin-top: auto;
+            background: linear-gradient(to right, #BF2EF0, #FF4500);
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
+        footer h3 a {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <i class="fas fa-cog settings-icon" onclick="toggleSettings()"></i>
+        <div class="settings-menu" id="settingsMenu">
+            <a href="profile.html">Profile</a>
+        </div>
+    </div>
+
+    <h1>StarLets</h1>
+    <p>Explore fun activities below:</p>
+
+    <div class="features">
+        <div class="feature-item">
+            <a href="poems.html"><i class="fas fa-book feature-icon"></i><br>Poems</a>
+        </div>
+        <div class="feature-item">
+            <a href="daily_news.html"><i class="fas fa-newspaper feature-icon"></i><br>Daily News</a>
+        </div>
+        <div class="feature-item">
+            <a href="quizzes.html"><i class="fas fa-question-circle feature-icon"></i><br>Quizzes</a>
+        </div>
+        <div class="feature-item">
+            <a href="http://localhost:8501/"><i class="fas fa-language feature-icon"></i><br>Mental Health Support</a>
+        </div>
+        <div class="feature-item">
+            <a href="games.html">
+                <i class="fas fa-puzzle-piece feature-icon"></i><br>Games
+            </a>
+        </div>
+        
+        <div class="feature-item">
+            <a href="http://localhost:8502/"><i class="fas fa-smile feature-icon"></i><br>Behavior Guide</a>
+        </div>
+    </div>
+
+    <footer>
+        <h3><a href="Notes.html">Your Expression</a></h3>
+    </footer>
+
+    <script>
+        function toggleSettings() {
+            var menu = document.getElementById('settingsMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function checkTimer() {
+            const startTime = localStorage.getItem('startTime');
+            const timerDuration = localStorage.getItem('timerDuration');
+            if (startTime && timerDuration) {
+                const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                const remainingTime = timerDuration - elapsedTime;
+                if (remainingTime <= 0) {
+                    lockApp();
+                } else {
+                    updateTitle(remainingTime);
+                    setInterval(() => {
+                        const updatedRemainingTime = timerDuration - Math.floor((Date.now() - startTime) / 1000);
+                        if (updatedRemainingTime <= 0) {
+                            lockApp();
+                        } else {
+                            updateTitle(updatedRemainingTime);
+                        }
+                    }, 1000);
+                }
+            }
+        }
+        function updateTitle(remainingTime) {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            document.title = Time `remaining: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        }
+        function lockApp() {
+            document.body.innerHTML = '<h2>The app is locked due to time restrictions. Please contact your parent to unlock.</h2>';
+            localStorage.clear();
+        }
+        window.onload = checkTimer;
+    </script>
+</body>
+</html>

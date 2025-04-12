@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Word Scramble Game</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top left, #ffd6e0, #b5ead7);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 25px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      padding: 40px 30px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #ff4d6d;
+    }
+
+    .scrambled-word {
+      font-size: 30px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      color: #1982c4;
+      margin: 20px 0;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      width: 100%;
+      border-radius: 12px;
+      border: 2px solid #1982c4;
+      font-size: 16px;
+      margin-bottom: 20px;
+      outline: none;
+      text-align: center;
+    }
+
+    .btn {
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 16px;
+      margin: 5px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #c9184a;
+    }
+
+    @media (max-width: 500px) {
+      .scrambled-word {
+        font-size: 24px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body onload="newGame()">
+  <div class="card">
+    <h1>🧠 Word Scramble</h1>
+    <div class="scrambled-word" id="scrambled"></div>
+    <input type="text" id="guess" placeholder="Type your guess...">
+    <div>
+      <button class="btn" onclick="check()">Check</button>
+      <button class="btn" onclick="newGame()">New Word</button>
+    </div>
+  </div>
+
+  <script>
+    const words = ['volcano', 'headphones', 'rainbow', 'library', 'mountain', 'basketball', 'planet'];
+    let currentWord = '';
+
+    function shuffle(word) {
+      let arr = word.split('');
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr.join('');
+    }
+
+    function newGame() {
+      currentWord = words[Math.floor(Math.random() * words.length)];
+      let scrambled = shuffle(currentWord);
+      while (scrambled === currentWord) {
+        scrambled = shuffle(currentWord);
+      }
+      document.getElementById('scrambled').textContent = scrambled;
+      document.getElementById('guess').value = '';
+    }
+
+    function check() {
+      const guess = document.getElementById('guess').value.trim().toLowerCase();
+      if (guess === currentWord) {
+        alert('✅ Correct! You nailed it!');
+      } else {
+        alert('❌ Nope, try again!');
+      }
+    }
+  </script>
+</body>
+</html>

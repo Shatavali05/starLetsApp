@@ -1,0 +1,291 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profile</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #4caea4, #0d4b75);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+      width: 300px;
+      text-align: center;
+    }
+    h2 { margin-bottom: 20px; }
+    p { margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>User Profile</h2>
+    <p><strong>Name:</strong> <span id="userName">Loading...</span></p>
+    <p><strong>Email:</strong> <span id="userEmail">Loading...</span></p>
+  </div>
+
+  <script>
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+      alert("You are not logged in.");
+      window.location.href = "login.html";
+    }
+
+    fetch(`http://localhost:5000/profile/${userId}`)
+      .then(async res => {
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`HTTP ${res.status}: ${text}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log("✅ Profile Data:", data);
+        document.getElementById("userName").textContent = data.name || "N/A";
+        document.getElementById("userEmail").textContent = data.email || "N/A";
+      })
+      .catch(err => {
+        console.error("❌ Error loading profile:", err);
+        alert("Could not load profile.");
+      });
+  </script>
+</body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profile</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      width: 340px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container:hover {
+      transform: scale(1.02);
+      transition: transform 0.3s ease;
+    }
+
+    .avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #fcb69f;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .info {
+      background: #f0f9ff;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 12px;
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+      text-align: left;
+    }
+
+    .info strong {
+      color: #555;
+    }
+
+    .info span {
+      color: #0077b6;
+      font-weight: 600;
+      float: right;
+    }
+
+    .logout-btn {
+      margin-top: 15px;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: #e63946;
+    }
+
+    .save-btn {
+      margin-top: 15px;
+      background: #00b894;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .save-btn:hover {
+      background: #019875;
+    }
+
+    .bg-illustration {
+      position: absolute;
+      bottom: -40px;
+      right: -40px;
+      width: 150px;
+      opacity: 0.2;
+    }
+
+    input[type="color"], select {
+      float: right;
+      border: none;
+      background: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" class="avatar" id="userAvatar" alt="Avatar" />
+    <h2 id="greeting">Hi there!</h2>
+
+    <div class="info"><strong>Name:</strong> <span id="userName">Loading...</span></div>
+    <div class="info"><strong>Email:</strong> <span id="userEmail">Loading...</span></div>
+    <div class="info"><strong>Age:</strong> <span id="userAge">--</span></div>
+
+    <div class="info">
+      <strong>Favorite Color:</strong>
+      <input type="color" id="favColorPicker" value="#0077b6" />
+      <span id="favColor">--</span>
+    </div>
+
+    <div class="info">
+      <strong>Mood Today:</strong>
+      <select id="moodSelect">
+        <option value="">-- Select --</option>
+        <option value="😊 Happy">😊 Happy</option>
+        <option value="😢 Sad">😢 Sad</option>
+        <option value="😠 Angry">😠 Angry</option>
+        <option value="😟 Anxious">😟 Anxious</option>
+        <option value="😌 Relaxed">😌 Relaxed</option>
+        <option value="😴 Tired">😴 Tired</option>
+      </select>
+      <span id="userMood">--</span>
+    </div>
+
+    <button class="save-btn" onclick="savePreferences()">💾 Save Preferences</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+
+    <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" class="bg-illustration" />
+  </div>
+
+  <script>
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+      alert("You are not logged in.");
+      window.location.href = "login.html";
+    }
+
+    // Load profile data
+    fetch(`http://localhost:5000/profile/${userId}`)
+      .then(async res => {
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`HTTP ${res.status}: ${text}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        document.getElementById("userName").textContent = data.name || "N/A";
+        document.getElementById("userEmail").textContent = data.email || "N/A";
+        document.getElementById("userAge").textContent = data.age || "--";
+        document.getElementById("favColorPicker").value = data.favoriteColor || "#0077b6";
+        document.getElementById("moodSelect").value = data.mood || "";
+        document.getElementById("userMood").textContent = data.mood || "--";
+        document.getElementById("favColor").textContent = data.favoriteColor || "--";
+        document.getElementById("greeting").textContent = `Hey ${data.name || 'there'}!`;
+
+        if (data.avatarUrl) {
+          document.getElementById("userAvatar").src = data.avatarUrl;
+        }
+      })
+      .catch(err => {
+        console.error("❌ Error loading profile:", err);
+        alert("Could not load profile.");
+      });
+
+    // Save preferences
+    function savePreferences() {
+      const favoriteColor = document.getElementById("favColorPicker").value;
+      const mood = document.getElementById("moodSelect").value;
+
+      fetch(`http://localhost:5000/profile/${userId}`, {
+        method: "PUT", // or PATCH if that's what your backend expects
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ favoriteColor, mood })
+      })
+        .then(res => {
+          if (!res.ok) throw new Error("Failed to save preferences.");
+          return res.json();
+        })
+        .then(updated => {
+          document.getElementById("userMood").textContent = mood;
+          document.getElementById("favColor").textContent = favoriteColor;
+          alert("✅ Preferences updated!");
+        })
+        .catch(err => {
+          console.error("Error saving preferences:", err);
+          alert("⚠ Couldn't save preferences.");
+        });
+    }
+
+    // Logout
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

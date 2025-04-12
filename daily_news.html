@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News App</title>
+    <link href="style/styles5.css" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="navbar obj-width">
+            <a class="logo" href="#">News</a>
+            <div class="search-container">
+                <input type="text" placeholder="Search news here" id="search-input">
+                <button id="search-button">Search</button>
+            </div>
+        </div>
+    </nav>
+    <main id="blog-container">
+        <!-- Blog cards will be injected here by JavaScript -->
+    </main>
+    <script src="script/script3.js"></script>
+    <script>
+        function checkTimer() {
+            const startTime = localStorage.getItem('startTime');
+            const timerDuration = localStorage.getItem('timerDuration');
+            const parentPassword = localStorage.getItem('parentPassword');
+    
+            if (startTime && timerDuration) {
+                const elapsedTime = Math.floor((Date.now() - startTime) / 1000); // Time in seconds
+                const remainingTime = timerDuration - elapsedTime;
+    
+                if (remainingTime <= 0) {
+                    lockApp();
+                } else {
+                    // Update title to show remaining time
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    document.title = Time `remaining: ${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                    
+                    // Start a timer to update the title every second
+                    setInterval(() => {
+                        const updatedRemainingTime = timerDuration - Math.floor((Date.now() - startTime) / 1000);
+                        if (updatedRemainingTime <= 0) {
+                            lockApp();
+                        } else {
+                            const minutes = Math.floor(updatedRemainingTime / 60);
+                            const seconds = updatedRemainingTime % 60;
+                            document.title = Time `remaining: ${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                        }
+                    }, 1000);
+                }
+            }
+        }
+    
+        function lockApp() {
+            document.body.innerHTML = '<h2>The app is locked due to time restrictions. Please contact your parent to unlock.</h2>';
+            localStorage.clear(); // Clear timer settings
+        }
+    
+        // Check timer on page load
+        window.onload = checkTimer;
+    </script>
+</body>
+</html>

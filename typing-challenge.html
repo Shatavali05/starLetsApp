@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Typing Challenge</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #0077ff;
+    }
+
+    #phrase {
+      font-size: 1.2rem;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #444;
+    }
+
+    #typed {
+      padding: 10px;
+      font-size: 1rem;
+      width: 100%;
+      border: 2px solid #0077ff;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #0077ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #005fcc;
+    }
+  </style>
+  <script>
+    const phrases = [
+      "Practice makes perfect",
+      "Quick brown fox jumps over the lazy dog",
+      "Typing improves speed",
+      "Stay focused and keep typing",
+      "Challenge accepted"
+    ];
+    let currentPhrase = '';
+
+    function newChallenge() {
+      currentPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+      document.getElementById('phrase').textContent = currentPhrase;
+      document.getElementById('typed').value = '';
+    }
+
+    function checkTyping() {
+      const typed = document.getElementById('typed').value.trim();
+      if (typed === currentPhrase) {
+        alert('🎉 Great Job! You nailed it!');
+      } else {
+        alert('🙃 Keep Practicing! You can do it!');
+      }
+    }
+  </script>
+</head>
+<body onload="newChallenge()">
+  <div class="container">
+    <h1>Typing Challenge</h1>
+    <p id="phrase"></p>
+    <input type="text" id="typed" placeholder="Start typing here..." />
+    <div>
+      <button onclick="checkTyping()">Check</button>
+      <button onclick="newChallenge()">New Challenge</button>
+    </div>
+  </div>
+</body>
+</html>

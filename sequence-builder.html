@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sequence Builder</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #e65c00;
+    }
+
+    #seq-hint {
+      font-size: 1.2rem;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1rem;
+      width: 100%;
+      border: 2px solid #e65c00;
+      border-radius: 10px;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #e65c00;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #cc4b00;
+    }
+  </style>
+  <script>
+    let sequence = [];
+
+    function generateSequence() {
+      sequence = Array.from({length: 4}, () => Math.floor(Math.random() * 10));
+      document.getElementById('seq-hint').textContent = `Add 1 to each: [ ${sequence.join(', ')} ]`;
+      document.getElementById('answer').value = '';
+    }
+
+    function checkSequence() {
+      const answer = document.getElementById('answer').value.split(',').map(num => parseInt(num.trim()));
+      const correct = sequence.map(n => n + 1);
+      const isCorrect = JSON.stringify(answer) === JSON.stringify(correct);
+
+      alert(isCorrect ? '✅ Correct! Great job!' : '❌ Try Again! Keep thinking!');
+    }
+  </script>
+</head>
+<body onload="generateSequence()">
+  <div class="container">
+    <h1>Sequence Builder</h1>
+    <p id="seq-hint"></p>
+    <input type="text" id="answer" placeholder="e.g., 2, 3, 4, 5">
+    <div>
+      <button onclick="checkSequence()">Check</button>
+      <button onclick="generateSequence()">New Sequence</button>
+    </div>
+  </div>
+</body>
+</html>

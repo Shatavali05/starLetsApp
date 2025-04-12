@@ -1,0 +1,141 @@
+<<<<<<< HEAD
+
+=======
+>>>>>>> 7de883b (Initial commit)
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Matching Symbols Game</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: #fce4ec;
+      text-align: center;
+      padding: 20px;
+      color: #4a148c;
+    }
+    h1 {
+      font-size: 2.5em;
+      color: #d81b60;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .tile {
+      width: 80px;
+      height: 80px;
+      background: #fff9c4;
+      border: 2px solid #f06292;
+      border-radius: 15px;
+      font-size: 2em;
+      cursor: pointer;
+      line-height: 80px;
+      user-select: none;
+      transition: background 0.3s;
+    }
+    .flipped {
+      background-color: #b39ddb;
+    }
+    .matched {
+      background-color: #81c784 !important;
+    }
+    #score {
+      margin-top: 20px;
+      font-size: 1.5em;
+    }
+  </style>
+</head>
+<body onload="renderBoard()">
+  <h1>Matching Symbols Game</h1>
+  <div id="board" class="grid"></div>
+  <div id="score">Score: 0</div>
+
+  <!-- Sound Effects -->
+  <audio id="correct-sound" src="https://www.soundjay.com/button/sounds/button-3.mp3" preload="auto"></audio>
+  <audio id="wrong-sound" src="https://www.soundjay.com/button/sounds/button-10.mp3" preload="auto"></audio>
+  <audio id="win-sound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+
+  <script>
+    let symbols = ['😀','🐶','🚗','🍎','🎈','⚽','🎵','🌟'];
+    let boardSymbols = [];
+    let selected = [];
+    let score = 0;
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function renderBoard() {
+      score = 0;
+      selected = [];
+      boardSymbols = shuffle([...symbols, ...symbols]); // duplicate and shuffle
+      const board = document.getElementById('board');
+      board.innerHTML = '';
+      document.getElementById('score').textContent = `Score: ${score}`;
+
+      boardSymbols.forEach((sym, i) => {
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        tile.dataset.index = i;
+        tile.onclick = () => reveal(tile, i, sym);
+        board.appendChild(tile);
+      });
+    }
+
+    function reveal(tile, index, sym) {
+      if (!tile || tile.classList.contains('flipped') || tile.classList.contains('matched') || selected.length === 2) return;
+
+      tile.textContent = sym;
+      tile.classList.add('flipped');
+      selected.push({ tile, sym, index });
+
+      if (selected.length === 2) {
+        const [first, second] = selected;
+        if (first.sym === second.sym) {
+          const correctSound = document.getElementById('correct-sound');
+          if (correctSound) correctSound.play();
+
+          first.tile.classList.add('matched');
+          second.tile.classList.add('matched');
+          score += 10;
+          document.getElementById('score').textContent = `Score: ${score}`;
+          selected = [];
+
+          // Check if all tiles matched
+          setTimeout(() => {
+            const allMatched = document.querySelectorAll('.matched').length;
+            if (allMatched === boardSymbols.length) {
+              const winSound = document.getElementById('win-sound');
+              winSound && winSound.play();
+              setTimeout(() => {
+                alert("🎉 Congratulations! You've matched all the symbols!");
+                renderBoard();
+              }, 400);
+            }
+          }, 300);
+        } else {
+          const wrongSound = document.getElementById('wrong-sound');
+          if (wrongSound) wrongSound.play();
+
+          setTimeout(() => {
+            first.tile.textContent = '';
+            second.tile.textContent = '';
+            first.tile.classList.remove('flipped');
+            second.tile.classList.remove('flipped');
+            selected = [];
+          }, 600);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
